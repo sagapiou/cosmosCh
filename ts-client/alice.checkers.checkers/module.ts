@@ -7,13 +7,46 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
+import { MsgCreateGame } from "./types/checkers/checkers/tx";
+import { MsgRejectGame } from "./types/checkers/checkers/tx";
+import { MsgPlayMove } from "./types/checkers/checkers/tx";
 
 import { Params as typeParams} from "./types"
 import { StoredGame as typeStoredGame} from "./types"
 import { SystemInfo as typeSystemInfo} from "./types"
 
-export {  };
+export { MsgCreateGame, MsgRejectGame, MsgPlayMove };
 
+type sendMsgCreateGameParams = {
+  value: MsgCreateGame,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgRejectGameParams = {
+  value: MsgRejectGame,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgPlayMoveParams = {
+  value: MsgPlayMove,
+  fee?: StdFee,
+  memo?: string
+};
+
+
+type msgCreateGameParams = {
+  value: MsgCreateGame,
+};
+
+type msgRejectGameParams = {
+  value: MsgRejectGame,
+};
+
+type msgPlayMoveParams = {
+  value: MsgPlayMove,
+};
 
 
 export const registry = new Registry(msgTypes);
@@ -45,6 +78,72 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
+		async sendMsgCreateGame({ value, fee, memo }: sendMsgCreateGameParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCreateGame: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgCreateGame({ value: MsgCreateGame.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgCreateGame: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgRejectGame({ value, fee, memo }: sendMsgRejectGameParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgRejectGame: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgRejectGame({ value: MsgRejectGame.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgRejectGame: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgPlayMove({ value, fee, memo }: sendMsgPlayMoveParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgPlayMove: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgPlayMove({ value: MsgPlayMove.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgPlayMove: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		
+		msgCreateGame({ value }: msgCreateGameParams): EncodeObject {
+			try {
+				return { typeUrl: "/alice.checkers.checkers.MsgCreateGame", value: MsgCreateGame.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCreateGame: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgRejectGame({ value }: msgRejectGameParams): EncodeObject {
+			try {
+				return { typeUrl: "/alice.checkers.checkers.MsgRejectGame", value: MsgRejectGame.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgRejectGame: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgPlayMove({ value }: msgPlayMoveParams): EncodeObject {
+			try {
+				return { typeUrl: "/alice.checkers.checkers.MsgPlayMove", value: MsgPlayMove.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgPlayMove: Could not create message: ' + e.message)
+			}
+		},
 		
 	}
 };
