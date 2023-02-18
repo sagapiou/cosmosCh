@@ -106,6 +106,7 @@ import (
 	checkersmodule "github.com/alice/checkers/x/checkers"
 	checkersmodulekeeper "github.com/alice/checkers/x/checkers/keeper"
 	checkersmoduletypes "github.com/alice/checkers/x/checkers/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 
 	appparams "github.com/alice/checkers/app/params"
@@ -178,6 +179,7 @@ var (
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		checkersmoduletypes.ModuleName: nil,
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -496,6 +498,7 @@ func New(
 	)
 
 	app.CheckersKeeper = *checkersmodulekeeper.NewKeeper(
+		app.BankKeeper,
 		appCodec,
 		keys[checkersmoduletypes.StoreKey],
 		keys[checkersmoduletypes.MemStoreKey],
