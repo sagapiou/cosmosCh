@@ -46,7 +46,7 @@ func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*typ
 
 	err = k.Keeper.CollectWager(ctx, &storedGame)
 	if err != nil {
-    	return nil, err
+		return nil, err
 	}
 
 	captured, moveErr := game.Move(
@@ -64,7 +64,7 @@ func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*typ
 	}
 
 	storedGame.Winner = rules.PieceStrings[game.Winner()]
-	
+
 	systemInfo, found := k.Keeper.GetSystemInfo(ctx)
 	if !found {
 		panic("SystemInfo not found")
@@ -77,15 +77,16 @@ func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*typ
 	} else {
 		k.Keeper.RemoveFromFifo(ctx, &storedGame, &systemInfo)
 		storedGame.Board = ""
+		k.Keeper.MustPayWinnings(ctx, &storedGame)
 	}
-	
+
 	storedGame.MoveCount++
 	storedGame.Deadline = types.FormatDeadline(types.GetNextDeadline(ctx))
 	storedGame.Turn = rules.PieceStrings[game.Turn]
 	k.Keeper.SetStoredGame(ctx, storedGame)
 	k.Keeper.SetSystemInfo(ctx, systemInfo)
-	
-	
+	ctx.GasMeter().ConsumeGas(types.PlayMoveGas, "Play a move")
+
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(types.MovePlayedEventType,
 			sdk.NewAttribute(types.MovePlayedEventCreator, msg.Creator),

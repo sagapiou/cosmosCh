@@ -25,12 +25,12 @@ const (
 )
 
 const (
-    NoFifoIndex = "-1"
+	NoFifoIndex = "-1"
 )
 
 const (
-    MaxTurnDuration = time.Duration(5 * 60 * 1000_000_000) // 1 day
-    DeadlineLayout  = "2006-01-02 15:04:05.999999999 +0000 UTC"
+	MaxTurnDuration = time.Duration(5 * 60 * 1000_000_000) // 1 day
+	DeadlineLayout  = "2006-01-02 15:04:05.999999999 +0000 UTC"
 )
 
 const (
@@ -40,6 +40,7 @@ const (
 	GameCreatedEventBlack     = "black"            // Is it relevant to me?
 	GameCreatedEventRed       = "red"              // Is it relevant to me?
 	GameCreatedEventWager     = "wager"
+	GameCreatedEventDenom = "denom"
 )
 
 const (
@@ -53,15 +54,20 @@ const (
 )
 
 const (
-    GameRejectedEventType      = "game-rejected"
-    GameRejectedEventCreator   = "creator"
-    GameRejectedEventGameIndex = "game-index"
+	GameRejectedEventType      = "game-rejected"
+	GameRejectedEventCreator   = "creator"
+	GameRejectedEventGameIndex = "game-index"
 )
 
 const (
-    GameForfeitedEventType      = "game-forfeited"
-    GameForfeitedEventGameIndex = "game-index"
-    GameForfeitedEventWinner    = "winner"
-    GameForfeitedEventBoard     = "board"
+	GameForfeitedEventType      = "game-forfeited"
+	GameForfeitedEventGameIndex = "game-index"
+	GameForfeitedEventWinner    = "winner"
+	GameForfeitedEventBoard     = "board"
 )
 
+const (
+	CreateGameGas       = 15000
+	PlayMoveGas         = 1000
+	RejectGameRefundGas = 14000
+)

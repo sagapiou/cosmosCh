@@ -68,7 +68,7 @@ func (k *Keeper) MustRefundWager(ctx sdk.Context, storedGame *types.StoredGame) 
 		// Do nothing
 	} else {
 		// TODO Implement a draw mechanism.
-		// Refund 
+		// Refund
 		black, err := storedGame.GetBlackAddress()
 		if err != nil {
 			panic(err.Error())
