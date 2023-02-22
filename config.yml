@@ -1,21 +1,24 @@
 version: 1
 accounts:
-- name: alice
-  coins:
-  - 20000token
-  - 200000000stake
-- name: bob
-  coins:
-  - 10000token
-  - 100000000stake
-- name : saga
-  coins : [20000token, 100000000stake]
-  mnemonic: wish mind volcano maze aisle exact excess outside video winner lend sick
+  - name: alice
+    coins:
+      - 20000token
+      - 200000000stake
+  - name: bob
+    coins:
+      - 10000token
+      - 100000000stake
+  - name: saga
+    coins: [1000token, 100000000stake]
+    mnemonic: wish mind volcano maze aisle exact excess outside video winner lend sick
+  - name: sia
+    coins: [1000token, 100000000stake]
+    mnemonic: brand slow lizard frost oak oven nest merge cricket lawn focus eye pepper mammal rigid receive grape celery multiply rail clinic pen avoid yard
 faucet:
   name: bob
   coins:
-  - 5token
-  - 100000stake
+    - 5token
+    - 100000stake
 client:
   typescript:
     path: ts-client
@@ -24,5 +27,5 @@ client:
   openapi:
     path: docs/static/openapi.yml
 validators:
-- name: alice
-  bonded: 100000000stake
+  - name: alice
+    bonded: 100000000stake
